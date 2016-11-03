@@ -47,7 +47,6 @@ import java.util.Iterator;
             for (int j = 0; j < height; j++) {
                 try {
                     if (in.read(pxlBytes) != 3) { throw new EOFException(); }
-
                     pxl[0] = pxlBytes[0];
                     pxl[1] = pxlBytes[1];
                     pxl[2] = pxlBytes[2];
@@ -87,14 +86,14 @@ import java.util.Iterator;
         int W = img.getWidth();
         int H = img.getHeight();
 
-        OutputStream out = new FileOutputStream(fnam);
-
-        // Write the watermark to the file
-        out.write(ourMagic);
-
-        // Write the width and height to the file
-        write4bytes(W, out);
-        write4bytes(H, out);
+//        OutputStream out = new FileOutputStream(fnam);
+//
+//        // Write the watermark to the file
+//        out.write(ourMagic);
+//
+//        // Write the width and height to the file
+//        write4bytes(W, out);
+//        write4bytes(H, out);
 
         compress(img);
 //        // Run the compression
@@ -130,7 +129,7 @@ import java.util.Iterator;
         ImageWriteParam param = writer.getDefaultWriteParam();
 
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        param.setCompressionQuality(0.05f);
+        param.setCompressionQuality(0.5f);
         writer.write(null, new IIOImage(image, null, null), param);
 
         os.close();
