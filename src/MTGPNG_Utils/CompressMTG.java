@@ -1,4 +1,4 @@
-package someTests;
+package MTGPNG_Utils;
 
 import javax.swing.*;
 import java.awt.image.*;
@@ -8,10 +8,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * Created by Daniel Hertzman-Ericson on 2016-01-17.
  */
-public class Compress {
-    final static byte[] magic = "mEgaMADNZ!".getBytes(StandardCharsets.US_ASCII);
+public class CompressMTG {
+    final static byte[] magic = "HKDK!".getBytes(StandardCharsets.US_ASCII);
 
-    public Compress(BufferedImage img, String fnam) throws IOException {
+    public CompressMTG(BufferedImage img, String fnam) throws IOException {
         int width  = img.getWidth();
         int height = img.getHeight();
         int[] pxl = new int[3];
