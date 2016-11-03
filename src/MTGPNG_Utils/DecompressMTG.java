@@ -5,22 +5,25 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.*;
 
+import static MTGPNG_Utils.CompressMTG.magic;
+
 /**
- * Created by Dennis on 2016-11-03v: 44.
+ * Created by Dennis and Henrik on 2016-11-03v: 44.
  */
 public class DecompressMTG {
+    public final static class InvalidMegatronFileException extends IOException { }
 
-    public static BufferedImage read(String fnam) {
+
+    public static BufferedImage read(String fnam) throws IOException {
         InputStream in = null;
         try {
             in = new FileInputStream(fnam);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        // Check magic value.
-        for (int i = 0; i < CompressMTG.magic.length; i++) {
+        for (int i = 0; i < magic.length; i++) {
             try {
-                if (in.read() != CompressMTG.magic[i]) { throw new IOException(); }
+                if (in.read() != magic[i]) { throw new InvalidMegatronFileException(); }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -52,7 +55,6 @@ public class DecompressMTG {
         }
         return img;
     }
-
 
         private static int read4bytes(InputStream in) {
         int b, v = 0;

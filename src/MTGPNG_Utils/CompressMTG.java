@@ -6,10 +6,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Created by Daniel Hertzman-Ericson on 2016-01-17.
+ * Created by Dennis Kristensson on 2016-01-17.
  */
 public class CompressMTG {
-    final static byte[] magic = "HKDK!".getBytes(StandardCharsets.US_ASCII);
+    final static byte[] magic = "mEgaMADNZ!".getBytes(StandardCharsets.US_ASCII);
 
     public CompressMTG(BufferedImage img, String fnam) throws IOException {
         int width  = img.getWidth();

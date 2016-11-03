@@ -5,6 +5,7 @@ import DHDMTG_Utils.DecompressDHD;
 import MTGPNG_Utils.CompressMTG;
 import MTGPNG_Utils.DecompressMTG;
 
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -53,8 +54,8 @@ public class Start {
             case 2:
                 scanner = new Scanner(System.in);
                 choice = scanner.nextInt();
-                img = DecompressMTG.read(listOfFiles[choice].getPath());
                 try {
+                    img = DecompressMTG.read(listOfFiles[choice].getPath());
                     ImageIO.write(img, "PNG", new File(folder + "/" +listOfFiles[choice].getName().replaceAll(".mtg",".png")));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -66,8 +67,7 @@ public class Start {
                 scanner = new Scanner(System.in);
                 choice = scanner.nextInt();
                 try {
-                    img = ImageIO.read(new File(listOfFiles != null ? listOfFiles[choice].getPath() : null));
-                    new CompressDHD(img, folder + "/" +listOfFiles[choice].getName().replaceAll(".png",".mtg"));
+                    new CompressDHD(folder + "/" +listOfFiles[choice].getName());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -75,16 +75,16 @@ public class Start {
                 break;
 
             case 4:
-                scanner = new Scanner(System.in);
-                choice = scanner.nextInt();
-                img = DecompressDHD.read(listOfFiles[choice].getPath());
-                try {
-                    ImageIO.write(img, "PNG", new File(folder + "/" +listOfFiles[choice].getName().replaceAll(".mtg",".png")));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                break;
+//                scanner = new Scanner(System.in);
+//                choice = scanner.nextInt();
+//                img = DecompressDHD.read(listOfFiles[choice].getPath());
+//                try {
+//                    ImageIO.write(img, "MTG", new File(folder + "/" +listOfFiles[choice].getName().replaceAll(".dhd",".mtg")));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                break;
         }
 
     }
