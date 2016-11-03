@@ -36,14 +36,26 @@ public class Start {
                 choice = scanner.nextInt();
                 try {
                    img = ImageIO.read(new File(listOfFiles != null ? listOfFiles[choice].getPath() : null));
+                    new Compress(img, folder + "/" +listOfFiles[choice].getName().replaceAll(".png",".mtg"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                new Compression(img);
+
                 break;
             case 2:
                 scanner = new Scanner(System.in);
                 choice = scanner.nextInt();
+                try {
+                    img = Decompress.read(listOfFiles[choice].getPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ImageIO.write(img, "PNG", new File(folder + "/" +listOfFiles[choice].getName().replaceAll(".mtg",".png")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 break;
         }
 
