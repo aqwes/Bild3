@@ -2,19 +2,9 @@ package DHDMTG_Utils;
 
 import MTGPNG_Utils.DecompressMTG;
 
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
-import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
+import java.awt.image.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-
 
 /**
  * Created by Dennis, Henrik on 2016-11-03v: 44.
@@ -39,7 +29,8 @@ import java.util.Iterator;
             }
         int width  = read4bytes(in);
         int height = read4bytes(in);
-        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+
         byte[] pxlBytes = new byte[3];
         int[] pxl = new int[3];
         WritableRaster imgr  = img.getRaster();
@@ -61,8 +52,27 @@ import java.util.Iterator;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        createFile(img,fnam);
+        compress(img,fnam);
         }
+
+    private void compress(BufferedImage img, String fnam) throws IOException {
+        int H = img.getHeight();
+        int W = img.getWidth();
+
+        OutputStream out = new FileOutputStream(new File("src/resources/img.dhd"));
+        out.write(ourMagic);
+
+        write4bytes(W, out);
+        write4bytes(H, out);
+
+        byte[] bytes = CompressAlgorithm.run(img);
+
+        System.out.println(bytes.length);
+        for (int i = 0; i < bytes.length; i++) {
+            out.write(bytes[i]);
+        }
+        out.close();
+    }
 
     private static int read4bytes(InputStream in) {
         int b, v = 0;
@@ -82,27 +92,6 @@ import java.util.Iterator;
         return v;
     }
 
-    private void createFile(BufferedImage img, String fnam) throws IOException {
-        int W = img.getWidth();
-        int H = img.getHeight();
-
-        OutputStream out = new FileOutputStream(fnam);
-
-        // Write the watermark to the file
-        out.write(ourMagic);
-
-        // Write the width and height to the file
-        write4bytes(W, out);
-        write4bytes(H, out);
-
-        byte[] bytes = compress(img);
-
-        for (int i = 0; i < bytes.length; i++) {
-            out.write(bytes[i]);
-        }
-        out.close();
-
-    }
 
     /** Writes an int as 4 bytes, big endian. */
     private static void write4bytes(int v, OutputStream out) throws IOException {
@@ -110,13 +99,6 @@ import java.util.Iterator;
         out.write(v>>>2*8 & 255);
         out.write(v>>>1*8 & 255);
         out.write(v       & 255);
-    }
-
-    private byte[] compress(BufferedImage image) throws IOException {
-
-
-        return null;
-
     }
 
 

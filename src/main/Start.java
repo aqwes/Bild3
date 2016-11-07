@@ -5,7 +5,6 @@ import DHDMTG_Utils.DecompressDHD;
 import MTGPNG_Utils.CompressMTG;
 import MTGPNG_Utils.DecompressMTG;
 
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,7 +26,7 @@ public class Start {
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
 
-        File folder = new File("src/resources");
+        final File folder = new File("src/resources");
         File[] listOfFiles = folder.listFiles();
 
         if (listOfFiles == null) {
@@ -43,52 +42,68 @@ public class Start {
                 scanner = new Scanner(System.in);
                 choice = scanner.nextInt();
                 try {
-                   img = ImageIO.read(new File(listOfFiles != null ? listOfFiles[choice].getPath() : null));
-                    new CompressMTG(img, folder + "/" +listOfFiles[choice].getName().replaceAll(".png",".mtg"));
+                    if (listOfFiles[choice].getName().contains("png")) {
+                        img = ImageIO.read(new File(listOfFiles != null ? listOfFiles[choice].getPath() : null));
+                        new CompressMTG(img, folder + "/" + listOfFiles[choice].getName().replaceAll(".png", ".mtg"));
+                    } else {
+                        System.out.print("Fel format");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 break;
 
             case 2:
                 scanner = new Scanner(System.in);
                 choice = scanner.nextInt();
                 try {
-                    img = DecompressMTG.read(listOfFiles[choice].getPath());
-                    ImageIO.write(img, "PNG", new File(folder + "/" +listOfFiles[choice].getName().replaceAll(".mtg",".png")));
+                    if (listOfFiles[choice].getName().contains("mtg")) {
+                        img = DecompressMTG.read(listOfFiles[choice].getPath());
+                        ImageIO.write(img, "PNG", new File(folder + "/" + listOfFiles[choice].getName().replaceAll(".mtg", ".png")));
+                    } else {
+                        System.out.print("Fel format");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 break;
 
             case 3:
                 scanner = new Scanner(System.in);
                 choice = scanner.nextInt();
-                try {
-                    new CompressDHD(folder + "/" +listOfFiles[choice].getName());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                if (listOfFiles[choice].getName().contains("mtg")) {
+                    try {
+                        new CompressDHD(folder + "/" + listOfFiles[choice].getName());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
+                } else {
+                    System.out.print("Fel format");
+                }
                 break;
 
             case 4:
-//                scanner = new Scanner(System.in);
-//                choice = scanner.nextInt();
-//                img = DecompressDHD.read(listOfFiles[choice].getPath());
-//                try {
-//                    ImageIO.write(img, "MTG", new File(folder + "/" +listOfFiles[choice].getName().replaceAll(".dhd",".mtg")));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                break;
+                scanner = new Scanner(System.in);
+                choice = scanner.nextInt();
+                if (listOfFiles[choice].getName().contains("dhd")) {
+                    try {
+
+                        img = DecompressDHD.read(folder + "/" + listOfFiles[choice].getName());
+                        new CompressMTG(img, folder + "/file.mtg");
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.print("Fel format");
+                }
+                break;
         }
 
     }
-    public static void main(String [] args){
+
+    public static void main(String[] args) {
         new Start();
     }
 }
