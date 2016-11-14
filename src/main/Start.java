@@ -11,9 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-/**
- * Created by Daniel Hertzman-Ericson on 2016-01-17.
- */
 public class Start {
 
     public Start() {
@@ -73,7 +70,8 @@ public class Start {
                 choice = scanner.nextInt();
                 if (listOfFiles[choice].getName().contains("mtg")) {
                     try {
-                        new CompressDHD(folder + "/" + listOfFiles[choice].getName());
+                        img = DecompressMTG.read(folder + "/" + listOfFiles[choice].getName());
+                        new CompressDHD(img);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -88,9 +86,8 @@ public class Start {
                 choice = scanner.nextInt();
                 if (listOfFiles[choice].getName().contains("dhd")) {
                     try {
-
                         img = DecompressDHD.read(folder + "/" + listOfFiles[choice].getName());
-                        new CompressMTG(img, folder + "/file.mtg");
+                        new CompressMTG(img, folder + "/" + listOfFiles[choice].getName().replaceAll(".dhd", ".mtg"));
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -100,7 +97,6 @@ public class Start {
                 }
                 break;
         }
-
     }
 
     public static void main(String[] args) {

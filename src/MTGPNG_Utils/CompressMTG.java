@@ -1,21 +1,23 @@
 package MTGPNG_Utils;
 
-import javax.swing.*;
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Dennis Kristensson on 2016-01-17.
  */
 public class CompressMTG {
-    final static byte[] magic = "mEgaMADNZ!".getBytes(StandardCharsets.US_ASCII);
+    public final static byte[] magic = "mEgaMADNZ!".getBytes(StandardCharsets.US_ASCII);
 
     public CompressMTG(BufferedImage img, String fnam) throws IOException {
-        int width  = img.getWidth();
+        int width = img.getWidth();
         int height = img.getHeight();
         int[] pxl = new int[3];
-        Raster imgr  = img.getRaster();
+        Raster imgr = img.getRaster();
         OutputStream out = new FileOutputStream(fnam);
         out.write(magic);
         write4bytes(width, out);
@@ -31,12 +33,14 @@ public class CompressMTG {
         out.close();
     }
 
-    /** Writes an int as 4 bytes, big endian. */
+    /**
+     * Writes an int as 4 bytes, big endian.
+     */
     private static void write4bytes(int v, OutputStream out) throws IOException {
-        out.write(v>>>3*8);
-        out.write(v>>>2*8 & 255);
-        out.write(v>>>1*8 & 255);
-        out.write(v       & 255);
+        out.write(v >>> 3 * 8);
+        out.write(v >>> 2 * 8 & 255);
+        out.write(v >>> 1 * 8 & 255);
+        out.write(v & 255);
     }
 
 }
