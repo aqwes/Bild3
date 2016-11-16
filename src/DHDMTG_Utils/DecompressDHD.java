@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * Created by Dennis, Henrik and Daniel on 2016-11-04v: 44.
  * Decompress our format and recreate it by using the colors in our palette.
  */
 public class DecompressDHD {
