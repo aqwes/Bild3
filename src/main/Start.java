@@ -11,6 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Author: Henrik Klein, Dennis Kristensson, Daniel Hertzman
+ * Start class that gets an bufferedimage as input and then gets treated by the user depending on which input the scanner gets.
+ * The options that the user can do are clearly described below.
+ */
 public class Start {
 
     public Start() {
