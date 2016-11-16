@@ -61,7 +61,7 @@ public class DecompressMTG {
         return img;
     }
 
-    private static int read4bytes(InputStream in) {
+    public static int read4bytes(InputStream in) {
         int b, v = 0;
         try {
             b = in.read();
