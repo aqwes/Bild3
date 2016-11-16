@@ -7,15 +7,23 @@ import java.awt.image.Raster;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Random;
+
 import static DHDMTG_Utils.DecompressDHD.ourMagic;
 
 /**
  * Created by Dennis, Henrik on 2016-11-03v: 44.
+ * This class reads a mtg file and reduce the colors.
+ *
  */
 public class CompressDHD {
-    static int [] allColors;
+    static int[] allColors;
 
+    /**
+     * Reads the bufferedimage, start the compression and then  
+     * @param img
+     * @throws IOException
+     */
     public CompressDHD(BufferedImage img) throws IOException {
         Random rand = new Random();
         int width = img.getWidth();
@@ -36,6 +44,7 @@ public class CompressDHD {
         }
         out.close();
     }
+
     /**
      * Writes an int as 4 bytes, big endian.
      */
@@ -48,7 +57,7 @@ public class CompressDHD {
 
     public static BufferedImage run(BufferedImage img) {
         int[][] imgArray = new int[img.getWidth()][img.getHeight()];
-        allColors= createpalette();
+        allColors = createpalette();
 
         for (int i = 0; i < img.getWidth(); i++) {
             for (int j = 0; j < img.getHeight(); j++) {
@@ -60,21 +69,21 @@ public class CompressDHD {
 
 
     public static int[] createpalette() {
-        int r=0,g=0,b=0;
+        int r = 0, g = 0, b = 0;
         int count = 0;
         int countColors = 0;
-        int[] colors = new int[Colors.palette.length/3];
+        int[] colors = new int[Colors.palette.length / 3];
 
         for (int i = 0; i < Colors.palette.length; i++) {
-            if(count==0){
+            if (count == 0) {
                 r = Colors.palette[i];
                 count++;
-            }else if (count==1){
+            } else if (count == 1) {
                 g = Colors.palette[i];
                 count++;
-            }else if (count==2){
+            } else if (count == 2) {
                 b = Colors.palette[i];
-                Color color = new Color(r,g,b);
+                Color color = new Color(r, g, b);
                 colors[countColors] = color.getRGB();
                 countColors++;
                 count = 0;
@@ -115,22 +124,22 @@ public class CompressDHD {
 
     public static int getClosestColor(int rgb) {
         double min = Double.MAX_VALUE;
-        int saveIndex=0;
+        int saveIndex = 0;
         for (int index = 0; index < allColors.length; index++) {
             double distance = distanceInLAB(allColors[index], rgb);
-         if(distance <= min){
-             min = distance;
-             saveIndex = index;
-         }
+            if (distance <= min) {
+                min = distance;
+                saveIndex = index;
+            }
         }
-        return  allColors[saveIndex];
+        return allColors[saveIndex];
     }
 
     // Converts RGB to XYZ. Link http://www.easyrgb.com/index.php?X=MATH&H=02#text2
     private static double[] RGBToXYZ(int c) {
-        double r = ((c >> 16) & 0xFF) / (double)255;
-        double g = ((c >> 8) & 0xFF) / (double)255;
-        double b = (c & 0xFF) / (double)255;
+        double r = ((c >> 16) & 0xFF) / (double) 255;
+        double g = ((c >> 8) & 0xFF) / (double) 255;
+        double b = (c & 0xFF) / (double) 255;
 
         r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : r / 12.92;
         g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : g / 12.92;

@@ -1,14 +1,18 @@
 package DHDMTG_Utils;
 
 import MTGPNG_Utils.DecompressMTG;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.io.*;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class DecompressDHD {
     public final static byte[] ourMagic = "dhd!".getBytes(StandardCharsets.US_ASCII);
-    static int [] allColors;
+    static int[] allColors;
 
     public static BufferedImage read(String fnam) throws IOException {
         InputStream in = new FileInputStream(fnam);
@@ -62,15 +66,15 @@ public class DecompressDHD {
 
     public static int getClosestColor(int rgb) {
         double min = Double.MAX_VALUE;
-        int saveIndex=0;
+        int saveIndex = 0;
         for (int index = 0; index < allColors.length; index++) {
             double distance = CompressDHD.distanceInLAB(allColors[index], rgb);
-            if(distance <= min){
+            if (distance <= min) {
                 min = distance;
                 saveIndex = index;
             }
         }
-        return  allColors[saveIndex];
+        return allColors[saveIndex];
     }
 
     private static BufferedImage findEqualColors(int[][] imgArray) {
