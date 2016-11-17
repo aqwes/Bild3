@@ -15,8 +15,6 @@ import static MTGPNG_Utils.CompressMTG.magic;
 public class DecompressMTG {
     public final static class InvalidMegatronFileException extends IOException {
     }
-
-
     public static BufferedImage read(String fnam) throws IOException {
         InputStream in = new FileInputStream(fnam);
 
@@ -61,7 +59,7 @@ public class DecompressMTG {
         return img;
     }
 
-    private static int read4bytes(InputStream in) {
+    public static int read4bytes(InputStream in) {
         int b, v = 0;
         try {
             b = in.read();

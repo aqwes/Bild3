@@ -1,7 +1,6 @@
 package DHDMTG_Utils;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.FileOutputStream;
@@ -12,15 +11,15 @@ import java.util.Random;
 import static DHDMTG_Utils.DecompressDHD.ourMagic;
 
 /**
- * Created by Dennis, Henrik on 2016-11-03v: 44.
+ * Created by Dennis, Henrik and Daniel on 2016-11-03v: 44.
  * This class reads a mtg file and reduce the colors.
- *
  */
 public class CompressDHD {
     static int[] allColors;
 
     /**
-     * Reads the bufferedimage, start the compression and then  
+     * Reads a image, start the compression and then writes out the new file.
+     *
      * @param img
      * @throws IOException
      */
@@ -55,62 +54,33 @@ public class CompressDHD {
         out.write(v & 255);
     }
 
+    /**
+     * Go though each pixel and search for the in our colorpalette.
+     * When all done we present the image so the user can se the result.
+     *
+     * @param img
+     * @return
+     */
     public static BufferedImage run(BufferedImage img) {
-        int[][] imgArray = new int[img.getWidth()][img.getHeight()];
-        allColors = createpalette();
+        allColors = Colors.createpalette();
+        BufferedImage bufferedImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         for (int i = 0; i < img.getWidth(); i++) {
             for (int j = 0; j < img.getHeight(); j++) {
-                imgArray[i][j] = img.getRGB(i, j);
+                bufferedImage.setRGB(i, j, getClosestColor(img.getRGB(i, j)));
             }
         }
-        return findEqualColors(imgArray);
+        showImage(bufferedImage);
+        return bufferedImage;
     }
 
-
-    public static int[] createpalette() {
-        int r = 0, g = 0, b = 0;
-        int count = 0;
-        int countColors = 0;
-        int[] colors = new int[Colors.palette.length / 3];
-
-        for (int i = 0; i < Colors.palette.length; i++) {
-            if (count == 0) {
-                r = Colors.palette[i];
-                count++;
-            } else if (count == 1) {
-                g = Colors.palette[i];
-                count++;
-            } else if (count == 2) {
-                b = Colors.palette[i];
-                Color color = new Color(r, g, b);
-                colors[countColors] = color.getRGB();
-                countColors++;
-                count = 0;
-            }
-        }
-        return colors;
-    }
-
-
-    private static BufferedImage findEqualColors(int[][] imgArray) {
-        for (int i = 0; i < imgArray.length; i++) {
-            for (int j = 0; j < imgArray[0].length; j++) {
-                imgArray[i][j] = getClosestColor(imgArray[i][j]);
-            }
-        }
-        return createBufferedImage(imgArray);
-    }
-
-    public static BufferedImage createBufferedImage(int[][] imgArray) {
-        BufferedImage bufferedImage = new BufferedImage(imgArray.length, imgArray[0].length, BufferedImage.TYPE_3BYTE_BGR);
-        for (int i = 0; i < imgArray.length; i++) {
-            for (int j = 0; j < imgArray[0].length; j++) {
-                int pixel = Integer.parseInt(String.valueOf(imgArray[i][j]));
-                bufferedImage.setRGB(i, j, pixel);
-            }
-        }
-        ImageIcon icon = new ImageIcon(bufferedImage);
+    /**
+     * Shows the image in a frame
+     *
+     * @param img
+     */
+    public static void showImage(BufferedImage img) {
+        ImageIcon icon = new ImageIcon(img);
         JPanel jPanel = new JPanel();
         jPanel.add(new JLabel(icon));
         JFrame frame = new JFrame();
@@ -119,9 +89,14 @@ public class CompressDHD {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        return bufferedImage;
     }
 
+    /**
+     * This method return the closes color in  the palette.
+     *
+     * @param rgb
+     * @return
+     */
     public static int getClosestColor(int rgb) {
         double min = Double.MAX_VALUE;
         int saveIndex = 0;
@@ -135,6 +110,12 @@ public class CompressDHD {
         return allColors[saveIndex];
     }
 
+    /**
+     * This formula is done so we can get the distance between the colors. Its easier to check with this method instead of comparing rgb values directly.
+     *
+     * @param c
+     * @return
+     */
     // Converts RGB to XYZ. Link http://www.easyrgb.com/index.php?X=MATH&H=02#text2
     private static double[] RGBToXYZ(int c) {
         double r = ((c >> 16) & 0xFF) / (double) 255;
@@ -157,6 +138,13 @@ public class CompressDHD {
         return xyz;
     }
 
+    /**
+     * Returns the distance between two colors
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
     public static double distanceInLAB(int c1, int c2) {
         double[] lab1 = XYZtoLAB(RGBToXYZ(c1));
         double[] lab2 = XYZtoLAB(RGBToXYZ(c2));
