@@ -10,7 +10,7 @@ import java.io.InputStream;
 import static MTGPNG_Utils.CompressMTG.magic;
 
 /**
- * Created by Dennis and Henrik on 2016-11-03v: 44.
+ * Created by Dennis, Daniel and Henrik on 2016-11-03v: 44.
  */
 public class DecompressMTG {
     public final static class InvalidMegatronFileException extends IOException {

@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Created by Dennis Kristensson on 2016-01-17.
+ * Created by Dennis Kristensson, Henrik, Daniel on 2016-01-17.
  */
 public class CompressMTG {
     public final static byte[] magic = "mEgaMADNZ!".getBytes(StandardCharsets.US_ASCII);
