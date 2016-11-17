@@ -92,7 +92,7 @@ public class CompressDHD {
     }
 
     /**
-     * This method return the closes color in  the palette.
+     * This method return the closes color in the palette.
      *
      * @param rgb
      * @return
@@ -111,7 +111,8 @@ public class CompressDHD {
     }
 
     /**
-     * This formula is done so we can get the distance between the colors. Its easier to check with this method instead of comparing rgb values directly.
+     * This formula is done so we can get the distance between the colors.
+     * Its easier to check with this method instead of comparing rgb values directly.
      *
      * @param c
      * @return
